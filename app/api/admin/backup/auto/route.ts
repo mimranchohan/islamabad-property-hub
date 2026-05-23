@@ -1,10 +1,17 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Auto-backup endpoint — called by Vercel Cron (or manually triggered)
-// Vercel cron.json will call this every 24h
-export async function GET() {
+// Auto-backup endpoint — ONLY callable by Vercel Cron with secret header
+export async function GET(req: NextRequest) {
   try {
+    // ✅ SECURITY: Verify CRON_SECRET — prevent unauthorized triggering
+    const authHeader = req.headers.get("authorization");
+    const cronSecret = process.env.CRON_SECRET;
+
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     // Check if backup already done in last 23 hours (prevent duplicates)
     const lastAutoBackup = await prisma.backup.findFirst({
       where: { type: "AUTO" },
@@ -18,7 +25,6 @@ export async function GET() {
       }
     }
 
-    // Collect all data
     const [agents, properties, sectors] = await Promise.all([
       prisma.user.count({ where: { role: "AGENT" } }),
       prisma.property.count(),
@@ -39,7 +45,7 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ success: true, message: "Auto backup recorded", counts: { agents, properties, sectors } });
+    return NextResponse.json({ success: true, counts: { agents, properties, sectors } });
   } catch (err) {
     console.error("Auto backup error:", err);
     return NextResponse.json({ error: "Backup failed" }, { status: 500 });
