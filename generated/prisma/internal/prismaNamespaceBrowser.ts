@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Property: 'Property',
-  ActivityLog: 'ActivityLog'
+  Sector: 'Sector',
+  ActivityLog: 'ActivityLog',
+  Backup: 'Backup'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -122,6 +124,18 @@ export const PropertyScalarFieldEnum = {
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
 
 
+export const SectorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  zone: 'zone',
+  city: 'city',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type SectorScalarFieldEnum = (typeof SectorScalarFieldEnum)[keyof typeof SectorScalarFieldEnum]
+
+
 export const ActivityLogScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
@@ -133,6 +147,21 @@ export const ActivityLogScalarFieldEnum = {
 } as const
 
 export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
+
+
+export const BackupScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  type: 'type',
+  sizeBytes: 'sizeBytes',
+  agentCount: 'agentCount',
+  propertyCount: 'propertyCount',
+  sectorCount: 'sectorCount',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type BackupScalarFieldEnum = (typeof BackupScalarFieldEnum)[keyof typeof BackupScalarFieldEnum]
 
 
 export const SortOrder = {

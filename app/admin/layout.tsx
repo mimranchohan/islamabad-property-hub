@@ -7,6 +7,8 @@ const navLinks = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/agents", label: "Agents", icon: "👥" },
   { href: "/admin/properties", label: "All Properties", icon: "🏠" },
+  { href: "/admin/sectors", label: "Sectors & Areas", icon: "📍" },
+  { href: "/admin/backup", label: "Backup & Recovery", icon: "💾" },
   { href: "/admin/activity", label: "Activity Logs", icon: "👁️" },
 ];
 
@@ -14,7 +16,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", width: "100vw", minHeight: "100vh", overflow: "hidden" }}>
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-logo">

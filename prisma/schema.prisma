@@ -64,6 +64,15 @@ model Property {
   activityLogs ActivityLog[]
 }
 
+model Sector {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  zone      String
+  city      String   @default("Islamabad")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
 model ActivityLog {
   id          String   @id @default(cuid())
   agentId     String
@@ -73,5 +82,17 @@ model ActivityLog {
   ipAddress   String?
   propertyId  String?
   property    Property? @relation(fields: [propertyId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Backup {
+  id          String   @id @default(cuid())
+  filename    String
+  type        String   @default("MANUAL")   // MANUAL | AUTO
+  sizeBytes   Int      @default(0)
+  agentCount  Int      @default(0)
+  propertyCount Int    @default(0)
+  sectorCount Int      @default(0)
+  notes       String?
   createdAt   DateTime @default(now())
 }

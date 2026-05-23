@@ -130,7 +130,7 @@ export default function EditPropertyPage() {
         </button>
       </div>
 
-      <div className="page-content" style={{ maxWidth: "800px" }}>
+      <div className="page-content">
         <form onSubmit={handleSubmit}>
 
           {/* Status */}

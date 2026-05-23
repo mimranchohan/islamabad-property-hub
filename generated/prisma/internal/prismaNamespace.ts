@@ -386,7 +386,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Property: 'Property',
-  ActivityLog: 'ActivityLog'
+  Sector: 'Sector',
+  ActivityLog: 'ActivityLog',
+  Backup: 'Backup'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "property" | "activityLog"
+    modelProps: "user" | "property" | "sector" | "activityLog" | "backup"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -554,6 +556,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Sector: {
+      payload: Prisma.$SectorPayload<ExtArgs>
+      fields: Prisma.SectorFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SectorFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SectorFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>
+        }
+        findFirst: {
+          args: Prisma.SectorFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SectorFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>
+        }
+        findMany: {
+          args: Prisma.SectorFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>[]
+        }
+        create: {
+          args: Prisma.SectorCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>
+        }
+        createMany: {
+          args: Prisma.SectorCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SectorCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>[]
+        }
+        delete: {
+          args: Prisma.SectorDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>
+        }
+        update: {
+          args: Prisma.SectorUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>
+        }
+        deleteMany: {
+          args: Prisma.SectorDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SectorUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SectorUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>[]
+        }
+        upsert: {
+          args: Prisma.SectorUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SectorPayload>
+        }
+        aggregate: {
+          args: Prisma.SectorAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSector>
+        }
+        groupBy: {
+          args: Prisma.SectorGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SectorGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SectorCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SectorCountAggregateOutputType> | number
+        }
+      }
+    }
     ActivityLog: {
       payload: Prisma.$ActivityLogPayload<ExtArgs>
       fields: Prisma.ActivityLogFieldRefs
@@ -625,6 +701,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ActivityLogCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ActivityLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    Backup: {
+      payload: Prisma.$BackupPayload<ExtArgs>
+      fields: Prisma.BackupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BackupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BackupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>
+        }
+        findFirst: {
+          args: Prisma.BackupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BackupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>
+        }
+        findMany: {
+          args: Prisma.BackupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>[]
+        }
+        create: {
+          args: Prisma.BackupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>
+        }
+        createMany: {
+          args: Prisma.BackupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BackupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>[]
+        }
+        delete: {
+          args: Prisma.BackupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>
+        }
+        update: {
+          args: Prisma.BackupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>
+        }
+        deleteMany: {
+          args: Prisma.BackupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BackupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BackupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>[]
+        }
+        upsert: {
+          args: Prisma.BackupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackupPayload>
+        }
+        aggregate: {
+          args: Prisma.BackupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBackup>
+        }
+        groupBy: {
+          args: Prisma.BackupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BackupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BackupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BackupCountAggregateOutputType> | number
         }
       }
     }
@@ -717,6 +867,18 @@ export const PropertyScalarFieldEnum = {
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
 
 
+export const SectorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  zone: 'zone',
+  city: 'city',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type SectorScalarFieldEnum = (typeof SectorScalarFieldEnum)[keyof typeof SectorScalarFieldEnum]
+
+
 export const ActivityLogScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
@@ -728,6 +890,21 @@ export const ActivityLogScalarFieldEnum = {
 } as const
 
 export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
+
+
+export const BackupScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  type: 'type',
+  sizeBytes: 'sizeBytes',
+  agentCount: 'agentCount',
+  propertyCount: 'propertyCount',
+  sectorCount: 'sectorCount',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type BackupScalarFieldEnum = (typeof BackupScalarFieldEnum)[keyof typeof BackupScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -934,7 +1111,9 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   property?: Prisma.PropertyOmit
+  sector?: Prisma.SectorOmit
   activityLog?: Prisma.ActivityLogOmit
+  backup?: Prisma.BackupOmit
 }
 
 /* Types for Logging */

@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" style={{ width: "100%", overflowX: "hidden" }}>
+      <body className={inter.className} style={{ width: "100%", overflowX: "hidden" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

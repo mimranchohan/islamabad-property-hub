@@ -10,5 +10,7 @@
  */
 export type * from './models/User'
 export type * from './models/Property'
+export type * from './models/Sector'
 export type * from './models/ActivityLog'
+export type * from './models/Backup'
 export type * from './commonInputTypes'

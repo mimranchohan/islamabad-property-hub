@@ -28,7 +28,17 @@ export type User = Prisma.UserModel
  */
 export type Property = Prisma.PropertyModel
 /**
+ * Model Sector
+ * 
+ */
+export type Sector = Prisma.SectorModel
+/**
  * Model ActivityLog
  * 
  */
 export type ActivityLog = Prisma.ActivityLogModel
+/**
+ * Model Backup
+ * 
+ */
+export type Backup = Prisma.BackupModel

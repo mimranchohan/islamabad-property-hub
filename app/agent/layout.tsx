@@ -16,7 +16,7 @@ export default function AgentLayout({ children }: { children: React.ReactNode })
   const { data: session } = useSession();
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", width: "100vw", minHeight: "100vh", overflow: "hidden" }}>
       <aside className="sidebar">
         <div className="sidebar-logo">
           <span style={{
