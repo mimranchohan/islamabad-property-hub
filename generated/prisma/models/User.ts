@@ -34,6 +34,7 @@ export type UserMinAggregateOutputType = {
   website: string | null
   agencyName: string | null
   isActive: boolean | null
+  isSuperAdmin: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   lastLogin: Date | null
@@ -49,6 +50,7 @@ export type UserMaxAggregateOutputType = {
   website: string | null
   agencyName: string | null
   isActive: boolean | null
+  isSuperAdmin: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   lastLogin: Date | null
@@ -64,6 +66,7 @@ export type UserCountAggregateOutputType = {
   website: number
   agencyName: number
   isActive: number
+  isSuperAdmin: number
   createdAt: number
   updatedAt: number
   lastLogin: number
@@ -81,6 +84,7 @@ export type UserMinAggregateInputType = {
   website?: true
   agencyName?: true
   isActive?: true
+  isSuperAdmin?: true
   createdAt?: true
   updatedAt?: true
   lastLogin?: true
@@ -96,6 +100,7 @@ export type UserMaxAggregateInputType = {
   website?: true
   agencyName?: true
   isActive?: true
+  isSuperAdmin?: true
   createdAt?: true
   updatedAt?: true
   lastLogin?: true
@@ -111,6 +116,7 @@ export type UserCountAggregateInputType = {
   website?: true
   agencyName?: true
   isActive?: true
+  isSuperAdmin?: true
   createdAt?: true
   updatedAt?: true
   lastLogin?: true
@@ -199,6 +205,7 @@ export type UserGroupByOutputType = {
   website: string | null
   agencyName: string | null
   isActive: boolean
+  isSuperAdmin: boolean
   createdAt: Date
   updatedAt: Date
   lastLogin: Date | null
@@ -235,6 +242,7 @@ export type UserWhereInput = {
   website?: Prisma.StringNullableFilter<"User"> | string | null
   agencyName?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -252,6 +260,7 @@ export type UserOrderByWithRelationInput = {
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   agencyName?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -272,6 +281,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   website?: Prisma.StringNullableFilter<"User"> | string | null
   agencyName?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -289,6 +299,7 @@ export type UserOrderByWithAggregationInput = {
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   agencyName?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -310,6 +321,7 @@ export type UserScalarWhereWithAggregatesInput = {
   website?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   agencyName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   lastLogin?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -325,6 +337,7 @@ export type UserCreateInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -342,6 +355,7 @@ export type UserUncheckedCreateInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -359,6 +373,7 @@ export type UserUpdateInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -376,6 +391,7 @@ export type UserUncheckedUpdateInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -393,6 +409,7 @@ export type UserCreateManyInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -408,6 +425,7 @@ export type UserUpdateManyMutationInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -423,6 +441,7 @@ export type UserUncheckedUpdateManyInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -438,6 +457,7 @@ export type UserCountOrderByAggregateInput = {
   website?: Prisma.SortOrder
   agencyName?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
@@ -453,6 +473,7 @@ export type UserMaxOrderByAggregateInput = {
   website?: Prisma.SortOrder
   agencyName?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
@@ -468,6 +489,7 @@ export type UserMinOrderByAggregateInput = {
   website?: Prisma.SortOrder
   agencyName?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
@@ -536,6 +558,7 @@ export type UserCreateWithoutPropertiesInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -552,6 +575,7 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -584,6 +608,7 @@ export type UserUpdateWithoutPropertiesInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,6 +625,7 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616,6 +642,7 @@ export type UserCreateWithoutActivityLogsInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -632,6 +659,7 @@ export type UserUncheckedCreateWithoutActivityLogsInput = {
   website?: string | null
   agencyName?: string | null
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lastLogin?: Date | string | null
@@ -664,6 +692,7 @@ export type UserUpdateWithoutActivityLogsInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -680,6 +709,7 @@ export type UserUncheckedUpdateWithoutActivityLogsInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -736,6 +766,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   website?: boolean
   agencyName?: boolean
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLogin?: boolean
@@ -754,6 +785,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   website?: boolean
   agencyName?: boolean
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLogin?: boolean
@@ -769,6 +801,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   website?: boolean
   agencyName?: boolean
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLogin?: boolean
@@ -784,12 +817,13 @@ export type UserSelectScalar = {
   website?: boolean
   agencyName?: boolean
   isActive?: boolean
+  isSuperAdmin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lastLogin?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "name" | "phone" | "website" | "agencyName" | "isActive" | "createdAt" | "updatedAt" | "lastLogin", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "name" | "phone" | "website" | "agencyName" | "isActive" | "isSuperAdmin" | "createdAt" | "updatedAt" | "lastLogin", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   properties?: boolean | Prisma.User$propertiesArgs<ExtArgs>
   activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
@@ -814,6 +848,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     website: string | null
     agencyName: string | null
     isActive: boolean
+    isSuperAdmin: boolean
     createdAt: Date
     updatedAt: Date
     lastLogin: Date | null
@@ -1251,6 +1286,7 @@ export interface UserFieldRefs {
   readonly website: Prisma.FieldRef<"User", 'String'>
   readonly agencyName: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isSuperAdmin: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLogin: Prisma.FieldRef<"User", 'DateTime'>

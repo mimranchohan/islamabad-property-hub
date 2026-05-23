@@ -40,6 +40,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           role: user.role,
           isActive: user.isActive,
+          isSuperAdmin: user.isSuperAdmin,
         };
       },
     }),
@@ -50,6 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         token.role = (user as { role?: string }).role;
         token.isActive = (user as { isActive?: boolean }).isActive;
+        token.isSuperAdmin = (user as { isSuperAdmin?: boolean }).isSuperAdmin;
       }
       return token;
     },
@@ -58,6 +60,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string;
         (session.user as { role?: string }).role = token.role as string;
         (session.user as { isActive?: boolean }).isActive = token.isActive as boolean;
+        (session.user as { isSuperAdmin?: boolean }).isSuperAdmin = token.isSuperAdmin as boolean;
       }
       return session;
     },

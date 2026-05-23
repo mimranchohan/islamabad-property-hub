@@ -84,6 +84,7 @@ export const UserScalarFieldEnum = {
   website: 'website',
   agencyName: 'agencyName',
   isActive: 'isActive',
+  isSuperAdmin: 'isSuperAdmin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   lastLogin: 'lastLogin'

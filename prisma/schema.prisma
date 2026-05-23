@@ -13,12 +13,13 @@ model User {
   id           String   @id @default(cuid())
   email        String   @unique
   password     String
-  role         String   @default("AGENT") // ADMIN | AGENT
+  role         String   @default("AGENT") // SUPER_ADMIN | ADMIN | AGENT
   name         String
   phone        String?
   website      String?
   agencyName   String?
   isActive     Boolean  @default(false)
+  isSuperAdmin Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   lastLogin    DateTime?
