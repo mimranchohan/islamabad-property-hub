@@ -67,11 +67,13 @@ export default function ExplorePage() {
     setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const fetchProperties = useCallback(async (f = filters) => {
+  type Filters = typeof filters;
+  const fetchProperties = useCallback(async (f: Partial<Filters> = filters) => {
     setLoading(true);
     setHasSearched(true);
     const params = new URLSearchParams();
-    Object.entries(f).forEach(([k, v]) => { if (v) params.set(k, v); });
+    const merged = { ...filters, ...f };
+    Object.entries(merged).forEach(([k, v]) => { if (v) params.set(k, v); });
     const res = await fetch(`/api/properties?${params}`);
     const data = await res.json();
     setProperties(Array.isArray(data) ? data : []);
