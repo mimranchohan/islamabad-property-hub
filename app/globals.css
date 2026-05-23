@@ -60,8 +60,7 @@ body {
 /* ─── Sidebar ────────────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-w);
-  min-height: 100vh;
-  height: 100%;
+  height: 100vh;
   background: var(--bg-card);
   border-right: 1px solid var(--border);
   padding: 1.5rem 1rem;
@@ -69,9 +68,10 @@ body {
   left: 0;
   top: 0;
   z-index: 200;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;          /* inner nav handles its own scroll */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-logo {
@@ -455,7 +455,8 @@ input:checked + .toggle-slider:before { transform: translateX(20px); }
   .sidebar {
     transform: translateX(-100%);
     box-shadow: none;
-    padding-top: 4rem; /* room for close button */
+    height: 100vh;
+    padding-top: 4.5rem; /* space for hamburger X button */
   }
 
   .sidebar.mobile-open {
