@@ -1,0 +1,77 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  role         String   @default("AGENT") // ADMIN | AGENT
+  name         String
+  phone        String?
+  website      String?
+  agencyName   String?
+  isActive     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastLogin    DateTime?
+
+  properties   Property[]
+  activityLogs ActivityLog[]
+}
+
+model Property {
+  id            String   @id @default(cuid())
+  agentId       String
+  agent         User     @relation(fields: [agentId], references: [id])
+
+  title         String
+  description   String?
+  propertyType  String   // HOUSE, FLAT, PLOT, etc.
+  purpose       String   // FOR_SALE | FOR_RENT
+  price         Float
+  priceUnit     String   @default("PKR") // PKR | LAKH | CRORE
+  
+  areaSize      Float
+  areaUnit      String   @default("MARLA") // MARLA | KANAL | SQ_FT
+  bedrooms      Int?
+  bathrooms     Int?
+  floors        Int?
+  kitchens      Int?
+  
+  sector        String
+  block         String?
+  streetNo      String?
+  fullAddress   String
+  latitude      Float?
+  longitude     Float?
+  
+  status        String   @default("ACTIVE") // ACTIVE | SOLD | RENTED | INACTIVE
+  images        String?  // JSON array of URLs
+  features      String?  // JSON array of features
+  furnishStatus String?  // FURNISHED | SEMI | UNFURNISHED
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  activityLogs ActivityLog[]
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  agentId     String
+  agent       User     @relation(fields: [agentId], references: [id])
+  actionType  String   // LOGIN | LOGOUT | SEARCH | VIEW_PROPERTY | ADD_PROPERTY | EDIT_PROPERTY | DELETE_PROPERTY
+  metadata    String?  // JSON: search query, property id, filters etc.
+  ipAddress   String?
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id])
+  createdAt   DateTime @default(now())
+}
