@@ -6,7 +6,8 @@ export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET || "islamabad-property-hub-super-secret-key-2024",
+    secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "islamabad-property-hub-super-secret-key-2024",
+    cookieName: "next-auth.session-token",
   });
 
   const isLoggedIn = !!token;
