@@ -26,7 +26,8 @@ export default function AgentLayout({ children }: { children: React.ReactNode })
   }, []);
 
   useEffect(() => {
-    if (sidebarOpen) document.body.style.overflow = "hidden";
+    const isMobile = window.innerWidth <= 768;
+    if (sidebarOpen && isMobile) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
   }, [sidebarOpen]);
@@ -36,7 +37,7 @@ export default function AgentLayout({ children }: { children: React.ReactNode })
     : pathname.includes("/edit") ? "Edit Property" : "Agent Portal");
 
   return (
-    <div style={{ display: "flex", width: "100vw", minHeight: "100vh", overflow: "hidden" }}>
+    <div style={{ display: "flex", width: "100vw", minHeight: "100vh" }}>
 
       {/* ── Hamburger ── */}
       <button

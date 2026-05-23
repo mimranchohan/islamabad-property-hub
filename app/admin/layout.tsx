@@ -31,7 +31,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // Prevent body scroll when sidebar open on mobile
   useEffect(() => {
-    if (sidebarOpen) document.body.style.overflow = "hidden";
+    const isMobile = window.innerWidth <= 768;
+    if (sidebarOpen && isMobile) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
   }, [sidebarOpen]);
@@ -103,7 +104,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
-    <div style={{ display: "flex", width: "100vw", minHeight: "100vh", overflow: "hidden" }}>
+    <div style={{ display: "flex", width: "100vw", minHeight: "100vh" }}>
 
       {/* ── Hamburger button (mobile) ── */}
       <button
