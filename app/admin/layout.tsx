@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/admin/sectors", label: "Sectors & Areas", icon: "📍" },
   { href: "/admin/backup", label: "Backup & Recovery", icon: "💾" },
   { href: "/admin/activity", label: "Activity Logs", icon: "👁️" },
+  { href: "/admin/settings", label: "Settings", icon: "⚙️" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
