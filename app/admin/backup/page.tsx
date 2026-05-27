@@ -109,16 +109,21 @@ export default function BackupPage() {
 
   async function handleAutoNow() {
     setAutoRunning(true);
-    const res = await fetch("/api/admin/backup/auto");
-    const data = await res.json();
-    if (data.success) {
-      setSuccess("✅ Auto backup complete!");
-    } else {
-      setSuccess(`ℹ️ ${data.message || "Checked"}`);
+    try {
+      const res = await fetch("/api/admin/backup/auto");
+      const data = await res.json();
+      if (data.success) {
+        setSuccess("✅ Auto backup complete!");
+      } else {
+        setSuccess(`ℹ️ ${data.message || "Checked"}`);
+      }
+      await fetchBackups();
+    } catch {
+      setError("Auto backup fail ho gaya. Dobara koshish karein.");
+    } finally {
+      setAutoRunning(false);
+      setTimeout(() => setSuccess(""), 4000);
     }
-    await fetchBackups();
-    setAutoRunning(false);
-    setTimeout(() => setSuccess(""), 4000);
   }
 
   const totalBackups = backups.length;

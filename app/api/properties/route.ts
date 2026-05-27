@@ -5,8 +5,8 @@ import { sanitizeString, safeFloat, safeInt, requireAuth } from "@/lib/security"
 
 const ALLOWED_TYPES = ["HOUSE","FLAT","APARTMENT","PLOT","COMMERCIAL_PLOT","OFFICE","SHOP","WAREHOUSE","FARM_HOUSE","PENTHOUSE","UPPER_PORTION","LOWER_PORTION","ROOM","STUDIO"];
 const ALLOWED_PURPOSES = ["FOR_SALE", "FOR_RENT"];
-const ALLOWED_PRICE_UNITS = ["PKR", "USD"];
-const ALLOWED_AREA_UNITS = ["MARLA", "KANAL", "SQFT", "SQYD", "SQMETER"];
+const ALLOWED_PRICE_UNITS = ["PKR", "USD", "LAKH", "CRORE"];
+const ALLOWED_AREA_UNITS = ["MARLA", "KANAL", "SQFT", "SQYD", "SQMETER", "SQ_FT"];
 
 export async function GET(req: NextRequest) {
   const user = await requireAuth();
@@ -73,14 +73,18 @@ export async function GET(req: NextRequest) {
     ];
   }
 
-  const properties = await prisma.property.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    take: 500, // ✅ prevent unbounded queries
-    include: { agent: { select: { name: true, phone: true, email: true, agencyName: true, website: true } } },
-  });
-
-  return NextResponse.json(properties);
+  try {
+    const properties = await prisma.property.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 500, // ✅ prevent unbounded queries
+      include: { agent: { select: { name: true, phone: true, email: true, agencyName: true, website: true } } },
+    });
+    return NextResponse.json(properties);
+  } catch (err) {
+    console.error("Properties GET error:", err);
+    return NextResponse.json({ error: "Failed to load properties" }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -114,39 +118,44 @@ export async function POST(req: NextRequest) {
   if (priceVal === null || priceVal < 0) return NextResponse.json({ error: "Invalid price" }, { status: 400 });
   if (areaSizeVal === null || areaSizeVal <= 0) return NextResponse.json({ error: "Invalid area size" }, { status: 400 });
 
-  const property = await prisma.property.create({
-    data: {
+  try {
+    const property = await prisma.property.create({
+      data: {
+        agentId: user.id!,
+        title: cleanTitle,
+        description: cleanDescription || null,
+        propertyType,
+        purpose,
+        price: priceVal,
+        priceUnit: ALLOWED_PRICE_UNITS.includes(priceUnit) ? priceUnit : "PKR",
+        areaSize: areaSizeVal,
+        areaUnit: ALLOWED_AREA_UNITS.includes(areaUnit) ? (areaUnit === "SQ_FT" ? "SQFT" : areaUnit) : "MARLA",
+        bedrooms: safeInt(bedrooms),
+        bathrooms: safeInt(bathrooms),
+        floors: safeInt(floors),
+        kitchens: safeInt(kitchens),
+        sector: cleanSector,
+        block: sanitizeString(block, 50) || null,
+        streetNo: sanitizeString(streetNo, 50) || null,
+        fullAddress: cleanAddress,
+        latitude: safeFloat(latitude),
+        longitude: safeFloat(longitude),
+        images: Array.isArray(images) ? JSON.stringify(images) : null,
+        features: Array.isArray(features) ? JSON.stringify(features) : null,
+        furnishStatus: sanitizeString(furnishStatus, 50) || null,
+      },
+    });
+
+    await logActivity({
       agentId: user.id!,
-      title: cleanTitle,
-      description: cleanDescription || null,
-      propertyType,
-      purpose,
-      price: priceVal,
-      priceUnit: ALLOWED_PRICE_UNITS.includes(priceUnit) ? priceUnit : "PKR",
-      areaSize: areaSizeVal,
-      areaUnit: ALLOWED_AREA_UNITS.includes(areaUnit) ? areaUnit : "MARLA",
-      bedrooms: safeInt(bedrooms),
-      bathrooms: safeInt(bathrooms),
-      floors: safeInt(floors),
-      kitchens: safeInt(kitchens),
-      sector: cleanSector,
-      block: sanitizeString(block, 50) || null,
-      streetNo: sanitizeString(streetNo, 50) || null,
-      fullAddress: cleanAddress,
-      latitude: safeFloat(latitude),
-      longitude: safeFloat(longitude),
-      images: Array.isArray(images) ? JSON.stringify(images) : null,
-      features: Array.isArray(features) ? JSON.stringify(features) : null,
-      furnishStatus: sanitizeString(furnishStatus, 50) || null,
-    },
-  });
+      actionType: "ADD_PROPERTY",
+      propertyId: property.id,
+      metadata: { title: cleanTitle, sector: cleanSector, propertyType },
+    });
 
-  await logActivity({
-    agentId: user.id!,
-    actionType: "ADD_PROPERTY",
-    propertyId: property.id,
-    metadata: { title: cleanTitle, sector: cleanSector, propertyType },
-  });
-
-  return NextResponse.json(property, { status: 201 });
+    return NextResponse.json(property, { status: 201 });
+  } catch (err) {
+    console.error("Property POST error:", err);
+    return NextResponse.json({ error: "Failed to create property" }, { status: 500 });
+  }
 }

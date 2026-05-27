@@ -8,16 +8,20 @@ export async function GET() {
   const user = await requireAdmin();
   if (user instanceof NextResponse) return user;
 
-  const agents = await prisma.user.findMany({
-    where: { role: "AGENT" },
-    select: {
-      id: true, name: true, email: true, phone: true,
-      agencyName: true, website: true, isActive: true, createdAt: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
-
-  return NextResponse.json(agents);
+  try {
+    const agents = await prisma.user.findMany({
+      where: { role: "AGENT" },
+      select: {
+        id: true, name: true, email: true, phone: true,
+        agencyName: true, website: true, isActive: true, createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json(agents);
+  } catch (err) {
+    console.error("Agents GET error:", err);
+    return NextResponse.json({ error: "Failed to load agents" }, { status: 500 });
+  }
 }
 
 // POST - create new agent (admin only)
@@ -52,20 +56,23 @@ export async function POST(req: NextRequest) {
   const existing = await prisma.user.findUnique({ where: { email: cleanEmail } });
   if (existing) return NextResponse.json({ error: "Email already exists" }, { status: 409 });
 
-  const hashedPassword = await bcrypt.hash(password, 12);
-
-  const agent = await prisma.user.create({
-    data: {
-      name: cleanName,
-      email: cleanEmail,
-      phone: cleanPhone || null,
-      agencyName: cleanAgency || null,
-      website: cleanWebsite || null,
-      password: hashedPassword,
-      role: "AGENT",
-      isActive: false,
-    },
-  });
-
-  return NextResponse.json({ id: agent.id, name: agent.name, email: agent.email }, { status: 201 });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const agent = await prisma.user.create({
+      data: {
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone || null,
+        agencyName: cleanAgency || null,
+        website: cleanWebsite || null,
+        password: hashedPassword,
+        role: "AGENT",
+        isActive: false,
+      },
+    });
+    return NextResponse.json({ id: agent.id, name: agent.name, email: agent.email }, { status: 201 });
+  } catch (err) {
+    console.error("Agent POST error:", err);
+    return NextResponse.json({ error: "Failed to create agent" }, { status: 500 });
+  }
 }

@@ -35,8 +35,8 @@ export async function requireAuth(): Promise<SessionUser | NextResponse> {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Deactivated users cannot access APIs (except active admins or the super admin)
-  if (!user.isActive && user.role !== "ADMIN" && user.email !== SUPER_ADMIN_EMAIL) {
+  // Deactivated users cannot access APIs (only super admin email is always exempt)
+  if (!user.isActive && user.email !== SUPER_ADMIN_EMAIL) {
     return NextResponse.json({ error: "Forbidden: Account is inactive" }, { status: 403 });
   }
 

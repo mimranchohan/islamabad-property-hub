@@ -18,7 +18,8 @@ export function formatArea(size: number, unit: string) {
 export function getPropertyTypeLabel(type: string) {
   const types: Record<string, string> = {
     HOUSE: "House",
-    FLAT: "Flat / Apartment",
+    FLAT: "Flat",
+    APARTMENT: "Apartment",
     PLOT: "Residential Plot",
     COMMERCIAL_PLOT: "Commercial Plot",
     OFFICE: "Office",

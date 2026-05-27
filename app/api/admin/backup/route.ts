@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
     if (user instanceof NextResponse) return user;
 
     const body = await req.json().catch(() => ({}));
-    const type = body.type || "MANUAL";
-    const notes = body.notes || "";
+    const ALLOWED_TYPES = ["MANUAL", "AUTO"];
+    const type = ALLOWED_TYPES.includes(body.type) ? body.type : "MANUAL";
+    const notes = typeof body.notes === "string" ? body.notes.slice(0, 500) : "";
 
     // Collect all data
     const [agents, properties, sectors, activityLogs] = await Promise.all([

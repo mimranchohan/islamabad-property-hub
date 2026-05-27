@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "islamabad-property-hub-super-secret-key-2024",
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
       name: "credentials",
@@ -20,7 +20,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user) return null;
-        if (!user.isActive && user.role !== "ADMIN") return null;
+        // Only the super admin email is exempt from isActive check
+        const SUPER_ADMIN = "changeyurstyle@gmail.com";
+        if (!user.isActive && user.email !== SUPER_ADMIN) return null;
 
         const isValid = await bcrypt.compare(
           credentials.password as string,

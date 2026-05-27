@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   const city = sanitizeString(body.city, 50);
 
   if (!name) return NextResponse.json({ error: "Sector name required" }, { status: 400 });
-  if (!zone) return NextResponse.json({ error: "Zone required" }, { status: 400 });
+  if (!zone || !VALID_ZONES.includes(zone)) return NextResponse.json({ error: "Valid zone required (A-T)" }, { status: 400 });
 
   try {
     const sector = await prisma.sector.create({

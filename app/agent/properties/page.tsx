@@ -23,27 +23,45 @@ export default function AgentPropertiesPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("ALL");
 
+  const [error, setError] = useState("");
+
   useEffect(() => {
     fetch("/api/properties?agentId=me")
-      .then((r) => r.json())
-      .then((data) => { setProperties(data); setLoading(false); });
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load");
+        return r.json();
+      })
+      .then((data) => { setProperties(Array.isArray(data) ? data : []); setLoading(false); })
+      .catch(() => { setError("Properties load nahi ho saki. Refresh karein."); setLoading(false); });
   }, []);
 
   const filtered = filter === "ALL" ? properties : properties.filter((p) => p.status === filter);
 
   async function updateStatus(id: string, status: string) {
-    await fetch(`/api/properties/${id}`, {
+    const prevProperties = properties;
+    setProperties((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
+    const res = await fetch(`/api/properties/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
-    setProperties((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
+    if (!res.ok) {
+      // Revert on failure
+      setProperties(prevProperties);
+      setError("Status update failed. Dobara koshish karein.");
+      setTimeout(() => setError(""), 4000);
+    }
   }
 
   async function deleteProperty(id: string) {
     if (!confirm("Are you sure you want to delete this property?")) return;
-    await fetch(`/api/properties/${id}`, { method: "DELETE" });
-    setProperties((prev) => prev.filter((p) => p.id !== id));
+    const res = await fetch(`/api/properties/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setProperties((prev) => prev.filter((p) => p.id !== id));
+    } else {
+      setError("Delete nahi ho saka. Dobara koshish karein.");
+      setTimeout(() => setError(""), 4000);
+    }
   }
 
   return (
@@ -59,6 +77,11 @@ export default function AgentPropertiesPage() {
       </div>
 
       <div className="page-content">
+        {error && (
+          <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: "8px", padding: "0.75rem 1rem", color: "#ef4444", marginBottom: "1rem", fontSize: "0.85rem" }}>
+            ⚠️ {error}
+          </div>
+        )}
         {/* Filter tabs */}
         <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}>
           {["ALL", "ACTIVE", "SOLD", "RENTED", "INACTIVE"].map((s) => (

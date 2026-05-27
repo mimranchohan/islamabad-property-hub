@@ -120,7 +120,7 @@ export default function AddPropertyPage() {
                   <select name="areaUnit" className="input-field" value={form.areaUnit} onChange={handleChange}>
                     <option value="MARLA">Marla</option>
                     <option value="KANAL">Kanal</option>
-                    <option value="SQ_FT">Sq. Ft</option>
+                    <option value="SQFT">Sq. Ft</option>
                   </select>
                 </div>
                 <div>

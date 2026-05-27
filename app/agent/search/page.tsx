@@ -39,15 +39,25 @@ export default function SearchPage() {
     setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const [searchError, setSearchError] = useState("");
+
   const search = useCallback(async () => {
     setLoading(true);
     setSearched(true);
+    setSearchError("");
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([k, v]) => { if (v) params.set(k, v); });
-    const res = await fetch(`/api/properties?${params.toString()}`);
-    const data = await res.json();
-    setProperties(data);
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/properties?${params.toString()}`);
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setProperties(Array.isArray(data) ? data : []);
+    } catch {
+      setSearchError("Search fail ho gai. Internet check karein ya dobara koshish karein.");
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
   }, [filters]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -65,6 +75,11 @@ export default function SearchPage() {
       </div>
 
       <div className="page-content">
+        {searchError && (
+          <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: "8px", padding: "0.75rem 1rem", color: "#ef4444", marginBottom: "1rem", fontSize: "0.85rem" }}>
+            ⚠️ {searchError}
+          </div>
+        )}
         {/* Search Filters */}
         <div className="form-section" style={{ marginBottom: "1.5rem" }}>
           <form onSubmit={handleSubmit}>
@@ -227,7 +242,10 @@ export default function SearchPage() {
                           {p.bedrooms && <div>🛏 {p.bedrooms} Beds • 🚿 {p.bathrooms} Baths</div>}
                           {p.features && (
                             <div style={{ marginTop: "0.5rem" }}>
-                              {JSON.parse(p.features).slice(0, 4).join(" • ")}
+                              {(() => {
+                                try { return JSON.parse(p.features).slice(0, 4).join(" • "); }
+                                catch { return ""; }
+                              })()}
                             </div>
                           )}
                         </div>
