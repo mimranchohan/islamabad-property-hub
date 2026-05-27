@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
 import { logActivity } from "@/lib/activity-logger";
-import { sanitizeString, safeFloat, safeInt } from "@/lib/security";
+import { sanitizeString, safeFloat, safeInt, requireAuth } from "@/lib/security";
 
 const ALLOWED_TYPES = ["HOUSE","FLAT","APARTMENT","PLOT","COMMERCIAL_PLOT","OFFICE","SHOP","WAREHOUSE","FARM_HOUSE","PENTHOUSE","UPPER_PORTION","LOWER_PORTION","ROOM","STUDIO"];
 const ALLOWED_PURPOSES = ["FOR_SALE", "FOR_RENT"];
@@ -10,8 +9,8 @@ const ALLOWED_PRICE_UNITS = ["PKR", "USD"];
 const ALLOWED_AREA_UNITS = ["MARLA", "KANAL", "SQFT", "SQYD", "SQMETER"];
 
 export async function GET(req: NextRequest) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await requireAuth();
+  if (user instanceof NextResponse) return user;
 
   const { searchParams } = new URL(req.url);
   const query    = sanitizeString(searchParams.get("q") || "");
@@ -24,8 +23,6 @@ export async function GET(req: NextRequest) {
   const maxArea  = searchParams.get("maxArea");
   const bedrooms = searchParams.get("bedrooms");
   const agentId  = searchParams.get("agentId");
-
-  const user = session.user as { id?: string; role?: string };
 
   if (query || sector || propertyType) {
     await logActivity({
@@ -87,13 +84,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const user = session.user as { id?: string; role?: string; isActive?: boolean };
-  if (user.role === "AGENT" && !user.isActive) {
-    return NextResponse.json({ error: "Your account is not active" }, { status: 403 });
-  }
+  const user = await requireAuth();
+  if (user instanceof NextResponse) return user;
 
   const body = await req.json().catch(() => null);
   if (!body || typeof body !== "object") return NextResponse.json({ error: "Invalid request body" }, { status: 400 });

@@ -13,21 +13,26 @@ async function main() {
   const hashedPassword = await bcrypt.hash("admin123", 12);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@propertyhubishb.com" },
-    update: {},
+    where: { email: "changeyurstyle@gmail.com" },
+    update: {
+      role: "ADMIN",
+      isActive: true,
+      isSuperAdmin: true,
+    },
     create: {
-      email: "admin@propertyhubishb.com",
+      email: "changeyurstyle@gmail.com",
       password: hashedPassword,
       name: "Super Admin",
       role: "ADMIN",
       isActive: true,
+      isSuperAdmin: true,
       agencyName: "Islamabad Property Hub",
     },
   });
 
-  console.log("✅ Admin created:", admin.email);
+  console.log("✅ Super Admin created:", admin.email);
   console.log("\n==========================================");
-  console.log("📧 Login Email  : admin@propertyhubishb.com");
+  console.log("📧 Login Email  : changeyurstyle@gmail.com");
   console.log("🔑 Password     : admin123");
   console.log("==========================================");
   console.log("⚠️  Change the password after first login!");

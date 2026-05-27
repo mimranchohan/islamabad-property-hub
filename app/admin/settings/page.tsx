@@ -165,11 +165,11 @@ export default function AdminSettingsPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "1.25rem" }}>
                   <div>
                     <label className="label">New Password</label>
-                    <input type="password" className="input-field" value={profile.newPassword} onChange={e => setProfile(p => ({ ...p, newPassword: e.target.value }))} placeholder="Naya password" minLength={6} />
+                    <input type="password" className="input-field" value={profile.newPassword} onChange={e => setProfile(p => ({ ...p, newPassword: e.target.value }))} placeholder="Naya password" minLength={8} />
                   </div>
                   <div>
                     <label className="label">Confirm Password</label>
-                    <input type="password" className="input-field" value={profile.confirmPassword} onChange={e => setProfile(p => ({ ...p, confirmPassword: e.target.value }))} placeholder="Dobara dalein" minLength={6} />
+                    <input type="password" className="input-field" value={profile.confirmPassword} onChange={e => setProfile(p => ({ ...p, confirmPassword: e.target.value }))} placeholder="Dobara dalein" minLength={8} />
                   </div>
                 </div>
 
@@ -199,7 +199,7 @@ export default function AdminSettingsPage() {
                   </div>
                   <div style={{ marginBottom: "1rem" }}>
                     <label className="label">Password *</label>
-                    <input type="password" className="input-field" value={newAdmin.password} onChange={e => setNewAdmin(p => ({ ...p, password: e.target.value }))} placeholder="Min 6 characters" required minLength={6} />
+                    <input type="password" className="input-field" value={newAdmin.password} onChange={e => setNewAdmin(p => ({ ...p, password: e.target.value }))} placeholder="Min 8 characters" required minLength={8} />
                   </div>
                   {msgBox(adminMsg)}
                   <button type="submit" className="btn-primary" disabled={adminLoading} style={{ width: "100%" }}>

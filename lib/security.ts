@@ -14,11 +14,38 @@ type SessionUser = {
 
 // ─── Auth Guards ──────────────────────────────────────────────────────────────
 
-/** Returns session user or a 401 NextResponse */
+import { prisma } from "@/lib/prisma";
+
+const SUPER_ADMIN_EMAIL = "changeyurstyle@gmail.com";
+
+/** Returns session user verified against the database or a 401/403 NextResponse */
 export async function requireAuth(): Promise<SessionUser | NextResponse> {
   const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  return session.user as SessionUser;
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Fetch fresh user data from database to prevent session desync
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, role: true, isActive: true, isSuperAdmin: true, email: true },
+  });
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Deactivated users cannot access APIs (except active admins or the super admin)
+  if (!user.isActive && user.role !== "ADMIN" && user.email !== SUPER_ADMIN_EMAIL) {
+    return NextResponse.json({ error: "Forbidden: Account is inactive" }, { status: 403 });
+  }
+
+  return {
+    id: user.id,
+    role: user.role,
+    isActive: user.isActive,
+    isSuperAdmin: user.isSuperAdmin || user.email === SUPER_ADMIN_EMAIL,
+  };
 }
 
 /** Requires ADMIN role */

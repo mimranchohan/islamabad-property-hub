@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
 import { logActivity } from "@/lib/activity-logger";
-import { sanitizeString, safeFloat, safeInt } from "@/lib/security";
+import { sanitizeString, safeFloat, safeInt, requireAuth } from "@/lib/security";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await requireAuth();
+  if (user instanceof NextResponse) return user;
 
   const { id } = await params;
   if (!id || typeof id !== "string") return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
@@ -21,7 +20,6 @@ export async function GET(
 
   if (!property) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const user = session.user as { id?: string };
   await logActivity({
     agentId: user.id!,
     actionType: "VIEW_PROPERTY",
@@ -36,13 +34,12 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await requireAuth();
+  if (user instanceof NextResponse) return user;
 
   const { id } = await params;
   if (!id || typeof id !== "string") return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
-  const user = session.user as { id?: string; role?: string };
   const property = await prisma.property.findUnique({ where: { id } });
 
   if (!property) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -103,13 +100,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const user = await requireAuth();
+  if (user instanceof NextResponse) return user;
 
   const { id } = await params;
   if (!id || typeof id !== "string") return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
-  const user = session.user as { id?: string; role?: string };
   const property = await prisma.property.findUnique({ where: { id } });
 
   if (!property) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -117,11 +113,16 @@ export async function DELETE(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  // Nullify propertyId in all activity logs referring to this property to prevent referential integrity constraint error
+  await prisma.activityLog.updateMany({
+    where: { propertyId: id },
+    data: { propertyId: null },
+  });
+
   await logActivity({
     agentId: user.id!,
     actionType: "DELETE_PROPERTY",
-    propertyId: id,
-    metadata: { propertyTitle: property.title },
+    metadata: { propertyId: id, propertyTitle: property.title },
   });
 
   await prisma.property.delete({ where: { id } });

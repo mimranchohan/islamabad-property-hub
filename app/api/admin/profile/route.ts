@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
 import bcrypt from "bcryptjs";
+import { requireAdmin, requireSuperAdmin, isValidPassword } from "@/lib/security";
 
 const SUPER_ADMIN_EMAIL = "changeyurstyle@gmail.com";
 
 // PATCH — update own profile (name, email, password)
 export async function PATCH(req: NextRequest) {
   try {
-    const session = await auth();
-    const user = session?.user as { id?: string; role?: string } | undefined;
-    if (!session || user?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const user = await requireAdmin();
+    if (user instanceof NextResponse) return user;
 
     const body = await req.json();
     const { name, email, currentPassword, newPassword } = body;
@@ -24,7 +21,9 @@ export async function PATCH(req: NextRequest) {
       if (!currentPassword) return NextResponse.json({ error: "Current password required" }, { status: 400 });
       const valid = await bcrypt.compare(currentPassword, admin.password);
       if (!valid) return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 });
-      if (newPassword.length < 6) return NextResponse.json({ error: "New password must be at least 6 characters" }, { status: 400 });
+      
+      const pwCheck = isValidPassword(newPassword);
+      if (!pwCheck.ok) return NextResponse.json({ error: pwCheck.error }, { status: 400 });
     }
 
     const updateData: Record<string, string> = {};
@@ -52,19 +51,16 @@ export async function PATCH(req: NextRequest) {
 // POST — Add new admin (SUPER ADMIN ONLY)
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
-    const sessionUser = session?.user as { role?: string; isSuperAdmin?: boolean; email?: string } | undefined;
-
-    // Only Super Admin can add admins
-    if (!session || sessionUser?.role !== "ADMIN" || !sessionUser?.isSuperAdmin) {
-      return NextResponse.json({ error: "Sirf Super Admin naya admin add kar sakta hai" }, { status: 403 });
-    }
+    const user = await requireSuperAdmin();
+    if (user instanceof NextResponse) return user;
 
     const body = await req.json();
     const { name, email, password } = body;
 
     if (!name || !email || !password) return NextResponse.json({ error: "Name, email and password required" }, { status: 400 });
-    if (password.length < 6) return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 });
+    
+    const pwCheck = isValidPassword(password);
+    if (!pwCheck.ok) return NextResponse.json({ error: pwCheck.error }, { status: 400 });
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 400 });
@@ -85,12 +81,8 @@ export async function POST(req: NextRequest) {
 // DELETE — Remove admin (SUPER ADMIN ONLY)
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await auth();
-    const sessionUser = session?.user as { role?: string; isSuperAdmin?: boolean } | undefined;
-
-    if (!session || sessionUser?.role !== "ADMIN" || !sessionUser?.isSuperAdmin) {
-      return NextResponse.json({ error: "Sirf Super Admin admin remove kar sakta hai" }, { status: 403 });
-    }
+    const user = await requireSuperAdmin();
+    if (user instanceof NextResponse) return user;
 
     const body = await req.json();
     const { adminId } = body;
@@ -101,6 +93,9 @@ export async function DELETE(req: NextRequest) {
     if (!target) return NextResponse.json({ error: "Admin not found" }, { status: 404 });
     if (target.isSuperAdmin) return NextResponse.json({ error: "Super Admin ko delete nahi kar sakte" }, { status: 400 });
     if (target.email === SUPER_ADMIN_EMAIL) return NextResponse.json({ error: "Super Admin ko delete nahi kar sakte" }, { status: 400 });
+
+    // Delete their activity logs first to prevent referential integrity errors (foreign key constraint)
+    await prisma.activityLog.deleteMany({ where: { agentId: adminId } });
 
     await prisma.user.delete({ where: { id: adminId } });
     return NextResponse.json({ success: true });

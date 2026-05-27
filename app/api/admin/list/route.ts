@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
+import { requireSuperAdmin } from "@/lib/security";
 
 // GET - list all admins (Super Admin only)
 export async function GET() {
   try {
-    const session = await auth();
-    const sessionUser = session?.user as { role?: string; isSuperAdmin?: boolean } | undefined;
-
-    if (!session || sessionUser?.role !== "ADMIN" || !sessionUser?.isSuperAdmin) {
-      return NextResponse.json({ error: "Super Admin only" }, { status: 403 });
-    }
+    const user = await requireSuperAdmin();
+    if (user instanceof NextResponse) return user;
 
     const admins = await prisma.user.findMany({
       where: { role: "ADMIN" },

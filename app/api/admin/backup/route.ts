@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
+import { requireAdmin } from "@/lib/security";
 
 // GET - list all backup records
 export async function GET() {
   try {
-    const session = await auth();
-    const user = session?.user as { role?: string } | undefined;
-    if (!session || user?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const user = await requireAdmin();
+    if (user instanceof NextResponse) return user;
 
     const backups = await prisma.backup.findMany({
       orderBy: { createdAt: "desc" },
@@ -26,11 +23,8 @@ export async function GET() {
 // POST - create a backup snapshot + return JSON for download
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
-    const user = session?.user as { role?: string } | undefined;
-    if (!session || user?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const user = await requireAdmin();
+    if (user instanceof NextResponse) return user;
 
     const body = await req.json().catch(() => ({}));
     const type = body.type || "MANUAL";

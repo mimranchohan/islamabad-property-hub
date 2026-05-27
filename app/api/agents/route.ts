@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { auth } from "@/auth";
-import { sanitizeString, isValidEmail, isValidPassword } from "@/lib/security";
+import { sanitizeString, isValidEmail, isValidPassword, requireAdmin } from "@/lib/security";
 
 // GET - list all agents (admin only)
 export async function GET() {
-  const session = await auth();
-  if (!session || (session.user as { role?: string })?.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const user = await requireAdmin();
+  if (user instanceof NextResponse) return user;
 
   const agents = await prisma.user.findMany({
     where: { role: "AGENT" },
@@ -25,10 +22,8 @@ export async function GET() {
 
 // POST - create new agent (admin only)
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session || (session.user as { role?: string })?.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const user = await requireAdmin();
+  if (user instanceof NextResponse) return user;
 
   const body = await req.json().catch(() => null);
   if (!body || typeof body !== "object") {
