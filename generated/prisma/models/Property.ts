@@ -35,6 +35,7 @@ export type PropertyAvgAggregateOutputType = {
   kitchens: number | null
   latitude: number | null
   longitude: number | null
+  viewCount: number | null
 }
 
 export type PropertySumAggregateOutputType = {
@@ -46,6 +47,7 @@ export type PropertySumAggregateOutputType = {
   kitchens: number | null
   latitude: number | null
   longitude: number | null
+  viewCount: number | null
 }
 
 export type PropertyMinAggregateOutputType = {
@@ -70,9 +72,11 @@ export type PropertyMinAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   status: string | null
+  viewCount: number | null
   images: string | null
   features: string | null
   furnishStatus: string | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -99,9 +103,11 @@ export type PropertyMaxAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   status: string | null
+  viewCount: number | null
   images: string | null
   features: string | null
   furnishStatus: string | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -128,9 +134,11 @@ export type PropertyCountAggregateOutputType = {
   latitude: number
   longitude: number
   status: number
+  viewCount: number
   images: number
   features: number
   furnishStatus: number
+  deletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -146,6 +154,7 @@ export type PropertyAvgAggregateInputType = {
   kitchens?: true
   latitude?: true
   longitude?: true
+  viewCount?: true
 }
 
 export type PropertySumAggregateInputType = {
@@ -157,6 +166,7 @@ export type PropertySumAggregateInputType = {
   kitchens?: true
   latitude?: true
   longitude?: true
+  viewCount?: true
 }
 
 export type PropertyMinAggregateInputType = {
@@ -181,9 +191,11 @@ export type PropertyMinAggregateInputType = {
   latitude?: true
   longitude?: true
   status?: true
+  viewCount?: true
   images?: true
   features?: true
   furnishStatus?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -210,9 +222,11 @@ export type PropertyMaxAggregateInputType = {
   latitude?: true
   longitude?: true
   status?: true
+  viewCount?: true
   images?: true
   features?: true
   furnishStatus?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -239,9 +253,11 @@ export type PropertyCountAggregateInputType = {
   latitude?: true
   longitude?: true
   status?: true
+  viewCount?: true
   images?: true
   features?: true
   furnishStatus?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -355,9 +371,11 @@ export type PropertyGroupByOutputType = {
   latitude: number | null
   longitude: number | null
   status: string
+  viewCount: number
   images: string | null
   features: string | null
   furnishStatus: string | null
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: PropertyCountAggregateOutputType | null
@@ -407,9 +425,11 @@ export type PropertyWhereInput = {
   latitude?: Prisma.FloatNullableFilter<"Property"> | number | null
   longitude?: Prisma.FloatNullableFilter<"Property"> | number | null
   status?: Prisma.StringFilter<"Property"> | string
+  viewCount?: Prisma.IntFilter<"Property"> | number
   images?: Prisma.StringNullableFilter<"Property"> | string | null
   features?: Prisma.StringNullableFilter<"Property"> | string | null
   furnishStatus?: Prisma.StringNullableFilter<"Property"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   agent?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -438,9 +458,11 @@ export type PropertyOrderByWithRelationInput = {
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
   images?: Prisma.SortOrderInput | Prisma.SortOrder
   features?: Prisma.SortOrderInput | Prisma.SortOrder
   furnishStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   agent?: Prisma.UserOrderByWithRelationInput
@@ -472,9 +494,11 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   latitude?: Prisma.FloatNullableFilter<"Property"> | number | null
   longitude?: Prisma.FloatNullableFilter<"Property"> | number | null
   status?: Prisma.StringFilter<"Property"> | string
+  viewCount?: Prisma.IntFilter<"Property"> | number
   images?: Prisma.StringNullableFilter<"Property"> | string | null
   features?: Prisma.StringNullableFilter<"Property"> | string | null
   furnishStatus?: Prisma.StringNullableFilter<"Property"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   agent?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -503,9 +527,11 @@ export type PropertyOrderByWithAggregationInput = {
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
   images?: Prisma.SortOrderInput | Prisma.SortOrder
   features?: Prisma.SortOrderInput | Prisma.SortOrder
   furnishStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PropertyCountOrderByAggregateInput
@@ -540,9 +566,11 @@ export type PropertyScalarWhereWithAggregatesInput = {
   latitude?: Prisma.FloatNullableWithAggregatesFilter<"Property"> | number | null
   longitude?: Prisma.FloatNullableWithAggregatesFilter<"Property"> | number | null
   status?: Prisma.StringWithAggregatesFilter<"Property"> | string
+  viewCount?: Prisma.IntWithAggregatesFilter<"Property"> | number
   images?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
   features?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
   furnishStatus?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Property"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Property"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Property"> | Date | string
 }
@@ -568,9 +596,11 @@ export type PropertyCreateInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   agent: Prisma.UserCreateNestedOneWithoutPropertiesInput
@@ -599,9 +629,11 @@ export type PropertyUncheckedCreateInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutPropertyInput
@@ -628,9 +660,11 @@ export type PropertyUpdateInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   agent?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -659,9 +693,11 @@ export type PropertyUncheckedUpdateInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutPropertyNestedInput
@@ -689,9 +725,11 @@ export type PropertyCreateManyInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -717,9 +755,11 @@ export type PropertyUpdateManyMutationInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -746,9 +786,11 @@ export type PropertyUncheckedUpdateManyInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -785,9 +827,11 @@ export type PropertyCountOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
   images?: Prisma.SortOrder
   features?: Prisma.SortOrder
   furnishStatus?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -801,6 +845,7 @@ export type PropertyAvgOrderByAggregateInput = {
   kitchens?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
 }
 
 export type PropertyMaxOrderByAggregateInput = {
@@ -825,9 +870,11 @@ export type PropertyMaxOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
   images?: Prisma.SortOrder
   features?: Prisma.SortOrder
   furnishStatus?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -854,9 +901,11 @@ export type PropertyMinOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
   images?: Prisma.SortOrder
   features?: Prisma.SortOrder
   furnishStatus?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -870,6 +919,7 @@ export type PropertySumOrderByAggregateInput = {
   kitchens?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  viewCount?: Prisma.SortOrder
 }
 
 export type PropertyNullableScalarRelationFilter = {
@@ -943,6 +993,14 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type PropertyCreateNestedOneWithoutActivityLogsInput = {
   create?: Prisma.XOR<Prisma.PropertyCreateWithoutActivityLogsInput, Prisma.PropertyUncheckedCreateWithoutActivityLogsInput>
   connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutActivityLogsInput
@@ -980,9 +1038,11 @@ export type PropertyCreateWithoutAgentInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutPropertyInput
@@ -1009,9 +1069,11 @@ export type PropertyUncheckedCreateWithoutAgentInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutPropertyInput
@@ -1068,9 +1130,11 @@ export type PropertyScalarWhereInput = {
   latitude?: Prisma.FloatNullableFilter<"Property"> | number | null
   longitude?: Prisma.FloatNullableFilter<"Property"> | number | null
   status?: Prisma.StringFilter<"Property"> | string
+  viewCount?: Prisma.IntFilter<"Property"> | number
   images?: Prisma.StringNullableFilter<"Property"> | string | null
   features?: Prisma.StringNullableFilter<"Property"> | string | null
   furnishStatus?: Prisma.StringNullableFilter<"Property"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Property"> | Date | string
 }
@@ -1096,9 +1160,11 @@ export type PropertyCreateWithoutActivityLogsInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   agent: Prisma.UserCreateNestedOneWithoutPropertiesInput
@@ -1126,9 +1192,11 @@ export type PropertyUncheckedCreateWithoutActivityLogsInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1170,9 +1238,11 @@ export type PropertyUpdateWithoutActivityLogsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   agent?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
@@ -1200,9 +1270,11 @@ export type PropertyUncheckedUpdateWithoutActivityLogsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1228,9 +1300,11 @@ export type PropertyCreateManyAgentInput = {
   latitude?: number | null
   longitude?: number | null
   status?: string
+  viewCount?: number
   images?: string | null
   features?: string | null
   furnishStatus?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1256,9 +1330,11 @@ export type PropertyUpdateWithoutAgentInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutPropertyNestedInput
@@ -1285,9 +1361,11 @@ export type PropertyUncheckedUpdateWithoutAgentInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutPropertyNestedInput
@@ -1314,9 +1392,11 @@ export type PropertyUncheckedUpdateManyWithoutAgentInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   images?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   furnishStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1374,9 +1454,11 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   latitude?: boolean
   longitude?: boolean
   status?: boolean
+  viewCount?: boolean
   images?: boolean
   features?: boolean
   furnishStatus?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   agent?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1406,9 +1488,11 @@ export type PropertySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   latitude?: boolean
   longitude?: boolean
   status?: boolean
+  viewCount?: boolean
   images?: boolean
   features?: boolean
   furnishStatus?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   agent?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1436,9 +1520,11 @@ export type PropertySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   latitude?: boolean
   longitude?: boolean
   status?: boolean
+  viewCount?: boolean
   images?: boolean
   features?: boolean
   furnishStatus?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   agent?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1466,14 +1552,16 @@ export type PropertySelectScalar = {
   latitude?: boolean
   longitude?: boolean
   status?: boolean
+  viewCount?: boolean
   images?: boolean
   features?: boolean
   furnishStatus?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "agentId" | "title" | "description" | "propertyType" | "purpose" | "price" | "priceUnit" | "areaSize" | "areaUnit" | "bedrooms" | "bathrooms" | "floors" | "kitchens" | "sector" | "block" | "streetNo" | "fullAddress" | "latitude" | "longitude" | "status" | "images" | "features" | "furnishStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
+export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "agentId" | "title" | "description" | "propertyType" | "purpose" | "price" | "priceUnit" | "areaSize" | "areaUnit" | "bedrooms" | "bathrooms" | "floors" | "kitchens" | "sector" | "block" | "streetNo" | "fullAddress" | "latitude" | "longitude" | "status" | "viewCount" | "images" | "features" | "furnishStatus" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["property"]>
 export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   agent?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   activityLogs?: boolean | Prisma.Property$activityLogsArgs<ExtArgs>
@@ -1514,9 +1602,11 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     latitude: number | null
     longitude: number | null
     status: string
+    viewCount: number
     images: string | null
     features: string | null
     furnishStatus: string | null
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["property"]>
@@ -1965,9 +2055,11 @@ export interface PropertyFieldRefs {
   readonly latitude: Prisma.FieldRef<"Property", 'Float'>
   readonly longitude: Prisma.FieldRef<"Property", 'Float'>
   readonly status: Prisma.FieldRef<"Property", 'String'>
+  readonly viewCount: Prisma.FieldRef<"Property", 'Int'>
   readonly images: Prisma.FieldRef<"Property", 'String'>
   readonly features: Prisma.FieldRef<"Property", 'String'>
   readonly furnishStatus: Prisma.FieldRef<"Property", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"Property", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Property", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Property", 'DateTime'>
 }

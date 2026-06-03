@@ -830,7 +830,8 @@ export const UserScalarFieldEnum = {
   isSuperAdmin: 'isSuperAdmin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  lastLogin: 'lastLogin'
+  lastLogin: 'lastLogin',
+  deletedAt: 'deletedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -858,9 +859,11 @@ export const PropertyScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   status: 'status',
+  viewCount: 'viewCount',
   images: 'images',
   features: 'features',
   furnishStatus: 'furnishStatus',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

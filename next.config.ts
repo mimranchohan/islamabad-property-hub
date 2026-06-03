@@ -9,9 +9,7 @@ const nextConfig: NextConfig = {
   },
 
   // ✅ React Compiler: auto-memoization (no more useMemo/useCallback boilerplate)
-  experimental: {
-    reactCompiler: true,
-  },
+  reactCompiler: true,
 
   // ✅ Security Headers — applied to all routes
   async headers() {
