@@ -23,9 +23,13 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   lastLogin    DateTime?
+  deletedAt    DateTime? // soft delete support
 
   properties   Property[]
   activityLogs ActivityLog[]
+
+  @@index([role])
+  @@index([isActive])
 }
 
 model Property {
@@ -38,10 +42,10 @@ model Property {
   propertyType  String   // HOUSE, FLAT, PLOT, etc.
   purpose       String   // FOR_SALE | FOR_RENT
   price         Float
-  priceUnit     String   @default("PKR") // PKR | LAKH | CRORE
+  priceUnit     String   @default("PKR") // PKR | LAKH | CRORE | USD
   
   areaSize      Float
-  areaUnit      String   @default("MARLA") // MARLA | KANAL | SQ_FT
+  areaUnit      String   @default("MARLA") // MARLA | KANAL | SQFT | SQYD | SQMETER
   bedrooms      Int?
   bathrooms     Int?
   floors        Int?
@@ -55,14 +59,22 @@ model Property {
   longitude     Float?
   
   status        String   @default("ACTIVE") // ACTIVE | SOLD | RENTED | INACTIVE
+  viewCount     Int      @default(0)        // track property views
   images        String?  // JSON array of URLs
   features      String?  // JSON array of features
   furnishStatus String?  // FURNISHED | SEMI | UNFURNISHED
+  deletedAt     DateTime? // soft delete support
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   activityLogs ActivityLog[]
+
+  @@index([agentId])
+  @@index([status])
+  @@index([sector])
+  @@index([agentId, status])
+  @@index([createdAt])
 }
 
 model Sector {
@@ -84,6 +96,10 @@ model ActivityLog {
   propertyId  String?
   property    Property? @relation(fields: [propertyId], references: [id])
   createdAt   DateTime @default(now())
+
+  @@index([agentId])
+  @@index([actionType])
+  @@index([createdAt])
 }
 
 model Backup {

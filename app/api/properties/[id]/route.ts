@@ -27,6 +27,12 @@ export async function GET(
     metadata: { propertyTitle: property.title },
   });
 
+  // Increment view count (non-blocking)
+  prisma.property.update({
+    where: { id },
+    data: { viewCount: { increment: 1 } }
+  }).catch(e => console.error("View count increment failed", e));
+
   return NextResponse.json(property);
 }
 
@@ -113,18 +119,20 @@ export async function DELETE(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  // Nullify propertyId in all activity logs referring to this property to prevent referential integrity constraint error
-  await prisma.activityLog.updateMany({
-    where: { propertyId: id },
-    data: { propertyId: null },
-  });
-
   await logActivity({
     agentId: user.id!,
     actionType: "DELETE_PROPERTY",
     metadata: { propertyId: id, propertyTitle: property.title },
   });
 
-  await prisma.property.delete({ where: { id } });
+  // Soft delete instead of hard delete
+  await prisma.property.update({ 
+    where: { id }, 
+    data: { 
+      deletedAt: new Date(),
+      status: "INACTIVE" 
+    } 
+  });
+  
   return NextResponse.json({ success: true });
 }

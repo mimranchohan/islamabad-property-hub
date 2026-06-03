@@ -13,16 +13,19 @@ export async function GET(req: NextRequest) {
   if (user instanceof NextResponse) return user;
 
   const { searchParams } = new URL(req.url);
-  const query    = sanitizeString(searchParams.get("q") || "");
-  const sector   = sanitizeString(searchParams.get("sector") || "");
+  const query        = sanitizeString(searchParams.get("q") || "");
+  const sector       = sanitizeString(searchParams.get("sector") || "");
+  const zone         = sanitizeString(searchParams.get("zone") || "");
   const propertyType = sanitizeString(searchParams.get("type") || "");
-  const purpose  = sanitizeString(searchParams.get("purpose") || "");
-  const minPrice = searchParams.get("minPrice");
-  const maxPrice = searchParams.get("maxPrice");
-  const minArea  = searchParams.get("minArea");
-  const maxArea  = searchParams.get("maxArea");
-  const bedrooms = searchParams.get("bedrooms");
-  const agentId  = searchParams.get("agentId");
+  const purpose      = sanitizeString(searchParams.get("purpose") || "");
+  const minPrice     = searchParams.get("minPrice");
+  const maxPrice     = searchParams.get("maxPrice");
+  const minArea      = searchParams.get("minArea");
+  const maxArea      = searchParams.get("maxArea");
+  const bedrooms     = searchParams.get("bedrooms");
+  const agentId      = searchParams.get("agentId");
+  const cursor       = searchParams.get("cursor");
+  const limit        = Math.min(safeInt(searchParams.get("limit")) ?? 50, 100);
 
   if (query || sector || propertyType) {
     await logActivity({
@@ -37,7 +40,6 @@ export async function GET(req: NextRequest) {
   if (agentId === "me") {
     where.agentId = user.id;
   } else if (agentId) {
-    // Agents cannot view other agents' private listings (only admins)
     if (user.role !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -46,11 +48,12 @@ export async function GET(req: NextRequest) {
 
   if (!agentId && user.role === "AGENT") where.status = "ACTIVE";
   if (sector) where.sector = { contains: sector };
+  if (zone) where.sector = { contains: zone }; // zone search via sector name prefix
   if (propertyType && ALLOWED_TYPES.includes(propertyType)) where.propertyType = propertyType;
   if (purpose && ALLOWED_PURPOSES.includes(purpose)) where.purpose = purpose;
 
   const bedroomsInt = safeInt(bedrooms);
-  if (bedroomsInt !== null) where.bedrooms = bedroomsInt;
+  if (bedroomsInt !== null) where.bedrooms = { gte: bedroomsInt };
 
   const minP = safeFloat(minPrice), maxP = safeFloat(maxPrice);
   if (minP !== null || maxP !== null) {
@@ -73,14 +76,28 @@ export async function GET(req: NextRequest) {
     ];
   }
 
+  // AGENT role: hide other agents' contact details to prevent data leakage
+  const agentSelect = user.role === "ADMIN"
+    ? { name: true, phone: true, email: true, agencyName: true, website: true }
+    : agentId === "me"
+      ? { name: true, phone: true, email: true, agencyName: true, website: true }
+      : { name: true, agencyName: true }; // no phone/email for competing agents
+
   try {
     const properties = await prisma.property.findMany({
       where,
       orderBy: { createdAt: "desc" },
-      take: 500, // ✅ prevent unbounded queries
-      include: { agent: { select: { name: true, phone: true, email: true, agencyName: true, website: true } } },
+      take: limit + 1,
+      cursor: cursor ? { id: cursor } : undefined,
+      skip: cursor ? 1 : 0,
+      include: { agent: { select: agentSelect } },
     });
-    return NextResponse.json(properties);
+
+    const hasMore = properties.length > limit;
+    const items = hasMore ? properties.slice(0, -1) : properties;
+    const nextCursor = hasMore ? items[items.length - 1].id : null;
+
+    return NextResponse.json({ items, hasMore, nextCursor, total: items.length });
   } catch (err) {
     console.error("Properties GET error:", err);
     return NextResponse.json({ error: "Failed to load properties" }, { status: 500 });

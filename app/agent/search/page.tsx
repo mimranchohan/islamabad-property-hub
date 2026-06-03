@@ -47,11 +47,12 @@ export default function SearchPage() {
     setSearchError("");
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([k, v]) => { if (v) params.set(k, v); });
+    params.set("limit", "50");
     try {
       const res = await fetch(`/api/properties?${params.toString()}`);
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
-      setProperties(Array.isArray(data) ? data : []);
+      setProperties(Array.isArray(data.items) ? data.items : []);
     } catch {
       setSearchError("Search fail ho gai. Internet check karein ya dobara koshish karein.");
       setProperties([]);
@@ -59,6 +60,14 @@ export default function SearchPage() {
       setLoading(false);
     }
   }, [filters]);
+
+  function shareOnWhatsApp(p: Property) {
+    const msg = encodeURIComponent(
+      `🏠 *${p.title}*\n📍 ${p.sector}\n💰 ${formatPrice(p.price, p.priceUnit)}\n📐 ${formatArea(p.areaSize, p.areaUnit)}${p.bedrooms ? `\n🛏 ${p.bedrooms} Beds` : ""}\n📞 ${p.agent.phone || p.agent.email}\n\n_Islamabad Property Hub_`
+    );
+    window.open(`https://wa.me/?text=${msg}`, "_blank");
+  }
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

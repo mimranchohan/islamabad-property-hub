@@ -1,10 +1,12 @@
 export const dynamic = 'force-dynamic';
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function AdminDashboard() {
   const session = await auth();
+  if (!session?.user?.id) redirect("/login");
 
   const [totalAgents, activeAgents, totalProperties, recentActivity] = await Promise.all([
     prisma.user.count({ where: { role: "AGENT" } }),

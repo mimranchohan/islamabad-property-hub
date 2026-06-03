@@ -1,7 +1,7 @@
 /**
  * Security helpers — central place for auth checks, input sanitization, rate limits
  */
-
+import "server-only";
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 

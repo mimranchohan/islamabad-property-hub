@@ -1,12 +1,16 @@
 export const dynamic = 'force-dynamic';
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getPropertyTypeLabel } from "@/lib/utils";
 
 export default async function AgentDashboard() {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
+
+  // Guard: if no valid session, middleware will redirect — but this is defense-in-depth
+  if (!userId) redirect("/login");
 
   const [myProperties, recentProperties] = await Promise.all([
     prisma.property.groupBy({ by: ["status"], where: { agentId: userId }, _count: { status: true } }),
