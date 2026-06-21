@@ -47,8 +47,8 @@ export async function GET(req: NextRequest) {
   }
 
   if (!agentId && user.role === "AGENT") where.status = "ACTIVE";
-  if (sector) where.sector = { contains: sector };
-  if (zone) where.sector = { contains: zone }; // zone search via sector name prefix
+  if (sector) where.sector = { contains: sector, mode: "insensitive" };
+  if (zone) where.sector = { contains: zone, mode: "insensitive" }; // zone search via sector name prefix
   if (propertyType && ALLOWED_TYPES.includes(propertyType)) where.propertyType = propertyType;
   if (purpose && ALLOWED_PURPOSES.includes(purpose)) where.purpose = purpose;
 
@@ -69,10 +69,10 @@ export async function GET(req: NextRequest) {
   }
   if (query) {
     where.OR = [
-      { title: { contains: query } },
-      { fullAddress: { contains: query } },
-      { sector: { contains: query } },
-      { description: { contains: query } },
+      { title: { contains: query, mode: "insensitive" } },
+      { fullAddress: { contains: query, mode: "insensitive" } },
+      { sector: { contains: query, mode: "insensitive" } },
+      { description: { contains: query, mode: "insensitive" } },
     ];
   }
 

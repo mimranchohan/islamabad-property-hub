@@ -2,8 +2,9 @@ import { PrismaClient } from "./generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
-// Use session mode (port 5432) for seed
-const SESSION_URL = "postgresql://postgres.zagyoznuzwvcyqfycvqf:Emi240988%40%40%21@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres";
+// Use session mode (port 5432) for seed — read from env, never hardcode
+const SESSION_URL = process.env.DIRECT_URL || process.env.DATABASE_URL;
+if (!SESSION_URL) throw new Error("DIRECT_URL or DATABASE_URL must be set");
 const adapter = new PrismaPg({ connectionString: SESSION_URL });
 const prisma = new PrismaClient({ adapter });
 
