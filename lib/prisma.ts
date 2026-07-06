@@ -7,9 +7,14 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  // Use DIRECT_URL (session mode, port 5432) if available, else DATABASE_URL
-  const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL!;
-  const adapter = new PrismaPg({ connectionString });
+  // RUNTIME must use the TRANSACTION pooler (port 6543, ?pgbouncer=true) via
+  // DATABASE_URL — it is built for serverless (many short-lived connections).
+  // DIRECT_URL is the SESSION pooler (port 5432) capped at 15 clients; using it
+  // in serverless exhausts the pool → EMAXCONNSESSION. Keep DIRECT_URL for
+  // migrations/seed only.
+  const connectionString = process.env.DATABASE_URL || process.env.DIRECT_URL!;
+  // Cap connections per serverless instance so we never overwhelm the pooler.
+  const adapter = new PrismaPg({ connectionString, max: 1 });
   return new PrismaClient({ adapter });
 }
 
