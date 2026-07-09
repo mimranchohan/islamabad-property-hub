@@ -125,14 +125,11 @@ export async function DELETE(
     metadata: { propertyId: id, propertyTitle: property.title },
   });
 
-  // Soft delete instead of hard delete
-  await prisma.property.update({ 
-    where: { id }, 
-    data: { 
-      deletedAt: new Date(),
-      status: "INACTIVE" 
-    } 
-  });
-  
+  // Hard delete — detach activity logs first (FK), then permanently remove the row
+  await prisma.$transaction([
+    prisma.activityLog.updateMany({ where: { propertyId: id }, data: { propertyId: null } }),
+    prisma.property.delete({ where: { id } }),
+  ]);
+
   return NextResponse.json({ success: true });
 }
