@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import AgentToggle from "./AgentToggle";
+import AgentActions from "./AgentActions";
 
 export default async function AgentsPage() {
   const agents = await prisma.user.findMany({
@@ -68,21 +69,16 @@ export default async function AgentsPage() {
                       <AgentToggle agentId={agent.id} isActive={agent.isActive} />
                     </td>
                     <td>
-                      <div style={{ display: "flex", gap: "0.5rem" }}>
-                        <Link
-                          href={`/admin/agents/${agent.id}`}
-                          style={{
-                            padding: "0.35rem 0.75rem",
-                            background: "rgba(99,102,241,0.15)",
-                            color: "#818cf8",
-                            borderRadius: "6px",
-                            textDecoration: "none",
-                            fontSize: "0.8rem",
-                          }}
-                        >
-                          View
-                        </Link>
-                      </div>
+                      <AgentActions
+                        agent={{
+                          id: agent.id,
+                          name: agent.name,
+                          email: agent.email,
+                          phone: agent.phone,
+                          agencyName: agent.agencyName,
+                          website: agent.website,
+                        }}
+                      />
                     </td>
                   </tr>
                 ))
