@@ -126,7 +126,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               )}
             </div>
             <button
-              onClick={() => signOut({ callbackUrl: "/login" })}
+              onClick={async () => { await signOut({ redirect: false }); window.location.href = "/login"; }}
               style={{
                 width: "100%", padding: "0.6rem",
                 background: "rgba(239,68,68,0.1)",
